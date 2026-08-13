@@ -30,7 +30,7 @@
             position: relative;
         }
 
-        /* ===== ВИДЕО ФОН ===== */
+      /* ===== ВИДЕО ФОН — БЕЗ РАЗМЫТИЯ ===== */
 .video-background {
     position: fixed;
     top: 0;
@@ -52,26 +52,19 @@
     height: auto;
     transform: translate(-50%, -50%);
     object-fit: cover;
-    filter: brightness(0.95) contrast(1.1) saturate(1.4);
+    /* УБРАНЫ ВСЕ ФИЛЬТРЫ — видео в чистом виде */
 }
 
 .video-poster {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        radial-gradient(ellipse at center, 
-            rgba(255, 220, 150, 0.3) 0%,
-            rgba(26, 26, 46, 0.8) 40%,
-            #000000 100%);
-    animation: posterPulse 3s ease-in-out infinite;
+    display: none; /* Убран постер */
 }
 
-@keyframes posterPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
+.video-vignette {
+    display: none; /* Убрана виньетка */
+}
+
+.video-overlay {
+    display: none; /* Убран оверлей */
 }
 
 .video-vignette {
