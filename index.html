@@ -30,7 +30,7 @@
             position: relative;
         }
 
-        /* ===== ВИДЕО ФОН ===== */
+        /* ===== ВИДЕО ФОН — БЕЗ РАЗМЫТИЯ ===== */
         .video-background {
             position: fixed;
             top: 0;
@@ -52,55 +52,22 @@
             height: auto;
             transform: translate(-50%, -50%);
             object-fit: cover;
-            filter: brightness(0.75) contrast(1.15) saturate(1.2);
+            /* УБРАНЫ ВСЕ ФИЛЬТРЫ — видео в чистом виде */
         }
 
-        /* Постер пока видео грузится */
+        /* Убран постер */
         .video-poster {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(ellipse at center, 
-                    rgba(255, 220, 150, 0.3) 0%,
-                    rgba(26, 26, 46, 0.8) 40%,
-                    #000000 100%);
-            animation: posterPulse 3s ease-in-out infinite;
+            display: none;
         }
 
-        @keyframes posterPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        /* Виньетка для читаемости */
+        /* Убрана виньетка */
         .video-vignette {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            pointer-events: none;
-            background: 
-                radial-gradient(ellipse at center, 
-                    transparent 20%, 
-                    rgba(0,0,0,0.3) 60%, 
-                    rgba(0,0,0,0.85) 100%);
+            display: none;
         }
 
-        /* Тёмный слой */
+        /* Убран тёмный слой */
         .video-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 3;
-            pointer-events: none;
-            background: rgba(0, 0, 0, 0.2);
+            display: none;
         }
 
         /* ===== HEADER ===== */
@@ -188,7 +155,7 @@
 
         .hexagon {
             position: absolute;
-            background: rgba(10, 10, 10, 0.75);
+            background: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             clip-path: polygon(16.67% 0%, 83.33% 0%, 100% 50%, 83.33% 100%, 16.67% 100%, 0% 50%);
@@ -369,7 +336,7 @@
     </style>
 </head>
 <body>
-    <!-- Видео фон галактики -->
+    <!-- Видео фон галактики — БЕЗ РАЗМЫТИЯ -->
     <div class="video-background">
         <div class="video-poster"></div>
         <video 
