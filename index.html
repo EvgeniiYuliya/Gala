@@ -30,7 +30,7 @@
             position: relative;
         }
 
-        /* ===== ВИДЕО ФОН — БЕЗ РАЗМЫТИЯ ===== */
+        /* ===== ВИДЕО ФОН ===== */
         .video-background {
             position: fixed;
             top: 0;
@@ -38,8 +38,6 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            overflow: hidden;
-            background: #000;
         }
 
         .video-background video {
@@ -52,22 +50,7 @@
             height: auto;
             transform: translate(-50%, -50%);
             object-fit: cover;
-            /* УБРАНЫ ВСЕ ФИЛЬТРЫ — видео в чистом виде */
-        }
-
-        /* Убран постер */
-        .video-poster {
-            display: none;
-        }
-
-        /* Убрана виньетка */
-        .video-vignette {
-            display: none;
-        }
-
-        /* Убран тёмный слой */
-        .video-overlay {
-            display: none;
+            /* НЕТ ФИЛЬТРОВ — видео чистое */
         }
 
         /* ===== HEADER ===== */
@@ -81,7 +64,7 @@
             align-items: center;
             gap: 25px;
             z-index: 1000;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.85), transparent);
+            background: rgba(0, 0, 0, 0.6);
             border-bottom: 1px solid rgba(201, 169, 97, 0.15);
         }
 
@@ -90,25 +73,6 @@
             height: 55px;
             background: var(--itk-gold);
             box-shadow: 0 2px 15px rgba(201, 169, 97, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .gold-square::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
-            transform: rotate(45deg);
-            animation: goldShine 4s infinite;
-        }
-
-        @keyframes goldShine {
-            0%, 100% { transform: translateX(-100%) rotate(45deg); }
-            50% { transform: translateX(100%) rotate(45deg); }
         }
 
         .logo-text {
@@ -122,17 +86,15 @@
             font-weight: 900;
             color: var(--itk-green);
             letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(26, 92, 58, 0.8), 0 2px 4px rgba(0,0,0,0.8);
         }
 
         .logo-full {
             font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.85);
+            color: rgba(255, 255, 255, 0.9);
             letter-spacing: 1.5px;
             margin-top: 2px;
             font-weight: 300;
             text-transform: uppercase;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
         }
 
         /* ===== MAIN CONTAINER ===== */
@@ -178,18 +140,6 @@
             background: linear-gradient(135deg, var(--hex-border-light), var(--hex-border));
             clip-path: polygon(16.67% 0%, 83.33% 0%, 100% 50%, 83.33% 100%, 16.67% 100%, 0% 50%);
             z-index: -1;
-        }
-
-        .hexagon::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%, rgba(0,0,0,0.3) 100%);
-            clip-path: polygon(16.67% 0%, 83.33% 0%, 100% 50%, 83.33% 100%, 16.67% 100%, 0% 50%);
-            pointer-events: none;
         }
 
         .hexagon.large {
@@ -267,7 +217,6 @@
             transform: scale(0.5);
             transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             z-index: 10;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
         }
 
         .hexagon.show-image .hex-image {
@@ -287,7 +236,7 @@
             transform: translateY(10px);
             transition: all 0.6s 0.3s;
             z-index: 10;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.9), 0 0 20px rgba(201, 169, 97, 0.4);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.9);
             letter-spacing: 0.5px;
             width: 85%;
         }
@@ -336,22 +285,17 @@
     </style>
 </head>
 <body>
-    <!-- Видео фон галактики — БЕЗ РАЗМЫТИЯ -->
+    <!-- Видео фон галактики -->
     <div class="video-background">
-        <div class="video-poster"></div>
         <video 
             id="galaxyVideo"
             autoplay 
             muted 
             loop 
-            playsinline
-            poster="videos/galaxy-poster.jpg">
+            playsinline>
             <source src="videos/Gala3.mp4" type="video/mp4">
-            Ваш браузер не поддерживает видео.
         </video>
     </div>
-    <div class="video-vignette"></div>
-    <div class="video-overlay"></div>
 
     <!-- Header -->
     <header class="header">
@@ -505,10 +449,10 @@
             }, delay);
         }
 
-        // Принудительный запуск видео (для мобильных)
+        // Запуск видео
         const video = document.getElementById('galaxyVideo');
         video.play().catch(error => {
-            console.log('Автовоспроизведение заблокировано:', error);
+            console.log('Автовоспроизведение:', error);
         });
 
         setPositions();
