@@ -30,68 +30,79 @@
             position: relative;
         }
 
-      /* ===== ВИДЕО ФОН — БЕЗ РАЗМЫТИЯ ===== */
-.video-background {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    overflow: hidden;
-    background: #000;
-}
+        /* ===== ВИДЕО ФОН ===== */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            background: #000;
+        }
 
-.video-background video {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    transform: translate(-50%, -50%);
-    object-fit: cover;
-    /* УБРАНЫ ВСЕ ФИЛЬТРЫ — видео в чистом виде */
-}
+        .video-background video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(0.75) contrast(1.15) saturate(1.2);
+        }
 
-.video-poster {
-    display: none; /* Убран постер */
-}
+        /* Постер пока видео грузится */
+        .video-poster {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at center, 
+                    rgba(255, 220, 150, 0.3) 0%,
+                    rgba(26, 26, 46, 0.8) 40%,
+                    #000000 100%);
+            animation: posterPulse 3s ease-in-out infinite;
+        }
 
-.video-vignette {
-    display: none; /* Убрана виньетка */
-}
+        @keyframes posterPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
 
-.video-overlay {
-    display: none; /* Убран оверлей */
-}
+        /* Виньетка для читаемости */
+        .video-vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            background: 
+                radial-gradient(ellipse at center, 
+                    transparent 20%, 
+                    rgba(0,0,0,0.3) 60%, 
+                    rgba(0,0,0,0.85) 100%);
+        }
 
-.video-vignette {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    pointer-events: none;
-    background: 
-        radial-gradient(ellipse at center, 
-            transparent 50%, 
-            rgba(0,0,0,0.15) 75%, 
-            rgba(0,0,0,0.5) 100%);
-}
+        /* Тёмный слой */
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+            background: rgba(0, 0, 0, 0.2);
+        }
 
-.video-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 3;
-    pointer-events: none;
-    background: rgba(0, 0, 0, 0.03);
-}
         /* ===== HEADER ===== */
         .header {
             position: fixed;
@@ -361,15 +372,16 @@
     <!-- Видео фон галактики -->
     <div class="video-background">
         <div class="video-poster"></div>
-       <video 
-    id="galaxyVideo"
-    autoplay 
-    muted 
-    loop 
-    playsinline
-    preload="auto">
-    <source src="videos/Gala3.mp4" type="video/mp4">
-</video>
+        <video 
+            id="galaxyVideo"
+            autoplay 
+            muted 
+            loop 
+            playsinline
+            poster="videos/galaxy-poster.jpg">
+            <source src="videos/galaxy.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
     </div>
     <div class="video-vignette"></div>
     <div class="video-overlay"></div>
