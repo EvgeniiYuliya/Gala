@@ -20,7 +20,6 @@
             --itk-green: #1A5C3A;
             --itk-gold: #C9A961;
             --itk-gold-light: #D4B876;
-            --text-primary: #e8e8e8;
         }
 
         body {
@@ -31,43 +30,53 @@
             position: relative;
         }
 
-        /* ===== ФОНОВОЕ ИЗОБРАЖЕНИЕ ===== */
-        .galaxy-background {
+        /* ===== ВИДЕО ФОН ===== */
+        .video-background {
             position: fixed;
-            top: -10%;
-            left: -10%;
-            width: 120%;
-            height: 120%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: 1;
             overflow: hidden;
+            background: #000;
         }
 
-        .galaxy-image {
+        .video-background video {
             position: absolute;
             top: 50%;
             left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(0.75) contrast(1.15) saturate(1.2);
+        }
+
+        /* Постер пока видео грузится */
+        .video-poster {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            /* ПРАВИЛЬНЫЙ ПУТЬ К ИЗОБРАЖЕНИЮ */
-            background-image: url('images/galaxy.jpg');
-            background-size: cover;
-            background-position: center;
-            transform: translate(-50%, -50%) scale(1.2);
-            animation: galaxyRotate 180s linear infinite, galaxyZoom 20s ease-in-out infinite alternate;
-            filter: brightness(0.85) contrast(1.1) saturate(1.2);
+            background: 
+                radial-gradient(ellipse at center, 
+                    rgba(255, 220, 150, 0.3) 0%,
+                    rgba(26, 26, 46, 0.8) 40%,
+                    #000000 100%);
+            animation: posterPulse 3s ease-in-out infinite;
         }
 
-        @keyframes galaxyRotate {
-            from { transform: translate(-50%, -50%) scale(1.2) rotate(0deg); }
-            to { transform: translate(-50%, -50%) scale(1.2) rotate(360deg); }
+        @keyframes posterPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
 
-        @keyframes galaxyZoom {
-            0% { transform: translate(-50%, -50%) scale(1.15) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) scale(1.25) rotate(360deg); }
-        }
-
-        .galaxy-vignette {
+        /* Виньетка для читаемости */
+        .video-vignette {
             position: fixed;
             top: 0;
             left: 0;
@@ -76,10 +85,14 @@
             z-index: 2;
             pointer-events: none;
             background: 
-                radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0.85) 100%);
+                radial-gradient(ellipse at center, 
+                    transparent 20%, 
+                    rgba(0,0,0,0.3) 60%, 
+                    rgba(0,0,0,0.85) 100%);
         }
 
-        .galaxy-overlay {
+        /* Тёмный слой */
+        .video-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -87,7 +100,7 @@
             height: 100%;
             z-index: 3;
             pointer-events: none;
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.2);
         }
 
         /* ===== HEADER ===== */
@@ -110,6 +123,25 @@
             height: 55px;
             background: var(--itk-gold);
             box-shadow: 0 2px 15px rgba(201, 169, 97, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gold-square::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: goldShine 4s infinite;
+        }
+
+        @keyframes goldShine {
+            0%, 100% { transform: translateX(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) rotate(45deg); }
         }
 
         .logo-text {
@@ -337,12 +369,22 @@
     </style>
 </head>
 <body>
-    <!-- Фон галактики -->
-    <div class="galaxy-background">
-        <div class="galaxy-image"></div>
+    <!-- Видео фон галактики -->
+    <div class="video-background">
+        <div class="video-poster"></div>
+        <video 
+            id="galaxyVideo"
+            autoplay 
+            muted 
+            loop 
+            playsinline
+            poster="videos/galaxy-poster.jpg">
+            <source src="videos/galaxy.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
     </div>
-    <div class="galaxy-vignette"></div>
-    <div class="galaxy-overlay"></div>
+    <div class="video-vignette"></div>
+    <div class="video-overlay"></div>
 
     <!-- Header -->
     <header class="header">
@@ -384,7 +426,6 @@
         const categories = {
             implants: { 
                 title: 'Костные импланты', 
-                // ПРАВИЛЬНЫЙ ПУТЬ К ИЗОБРАЖЕНИЯМ
                 image: 'images/implants.jpg'
             },
             cardio: { 
@@ -474,7 +515,6 @@
                     img.alt = category.title;
                     img.className = 'hex-image';
                     img.onerror = function() {
-                        // Если изображение не загрузилось, скрываем его
                         this.style.display = 'none';
                     };
                     hexagon.appendChild(img);
@@ -498,9 +538,14 @@
             }, delay);
         }
 
+        // Принудительный запуск видео (для мобильных)
+        const video = document.getElementById('galaxyVideo');
+        video.play().catch(error => {
+            console.log('Автовоспроизведение заблокировано:', error);
+        });
+
         setPositions();
         scaleGrid();
-
         window.addEventListener('resize', scaleGrid);
 
         const animationSequence = [
