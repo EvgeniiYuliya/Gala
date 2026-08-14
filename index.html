@@ -460,3 +460,50 @@
                     hexagon.classList.remove('flying', 'flying-category');
                     hexagon.style.opacity = '1';
                     hexagon.style.transform = 'scale(1)';
+                }, isCategory ? 3000 : 2000);
+
+            }, delay);
+        }
+
+        // Запуск видео
+        const video = document.getElementById('galaxyVideo');
+        video.play().catch(error => {
+            console.log('Автовоспроизведение:', error);
+        });
+
+        setPositions();
+        scaleGrid();
+        window.addEventListener('resize', scaleGrid);
+
+        const animationSequence = [
+            { index: 0, delay: 500 },
+            { index: 1, delay: 2500 },
+            { index: 2, delay: 3500 },
+            { index: 3, delay: 6500 },
+            { index: 4, delay: 8500 },
+            { index: 5, delay: 9500 },
+            { index: 6, delay: 12500 },
+            { index: 7, delay: 14500 },
+            { index: 8, delay: 16500 },
+            { index: 9, delay: 19500 },
+            { index: 10, delay: 20500 },
+            { index: 11, delay: 22500 }
+        ];
+
+        animationSequence.forEach(seq => {
+            animateHexagon(seq.index, seq.delay);
+        });
+
+        setTimeout(() => {
+            hexagons.forEach(hex => {
+                hex.addEventListener('mouseenter', () => {
+                    hex.style.filter = 'brightness(1.4)';
+                });
+                hex.addEventListener('mouseleave', () => {
+                    hex.style.filter = 'brightness(1)';
+                });
+            });
+        }, 25000);
+    </script>
+</body>
+</html>
