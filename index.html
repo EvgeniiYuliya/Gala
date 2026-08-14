@@ -50,8 +50,8 @@
             height: auto;
             transform: translate(-50%, -50%);
             object-fit: cover;
-            /* ЗАТЕМНЕНИЕ ВИДЕО — меняйте brightness */
-            filter: brightness(0.6) contrast(1.1);
+            /* РЕГУЛИРУЙТЕ ЯРКОСТЬ ЗДЕСЬ (0.0 - 1.0) */
+            filter: brightness(0.5) contrast(1.1);
         }
 
         /* ===== HEADER ===== */
@@ -116,12 +116,11 @@
             transform-origin: center center;
         }
 
+        /* ОСНОВНОЙ КОНТЕЙНЕР ШЕСТИУГОЛЬНИКА (без clip-path для контента) */
         .hexagon {
             position: absolute;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            clip-path: polygon(16.67% 0%, 83.33% 0%, 100% 50%, 83.33% 100%, 16.67% 100%, 0% 50%);
+            width: 200px; /* Базовая ширина для large */
+            height: 115px; /* Базовая высота для large */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -129,10 +128,24 @@
             opacity: 0;
             transform: scale(0);
             transition: filter 0.4s, box-shadow 0.4s;
-            overflow: visible; /* ВАЖНО: позволяет контенту выходить за clip-path */
         }
 
-        .hexagon::before {
+        /* ФОН ШЕСТИУГОЛЬНИКА (с clip-path) */
+        .hex-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            clip-path: polygon(16.67% 0%, 83.33% 0%, 100% 50%, 83.33% 100%, 16.67% 100%, 0% 50%);
+            z-index: 1;
+            transition: all 0.4s;
+        }
+
+        .hex-bg::before {
             content: '';
             position: absolute;
             top: -3px;
@@ -142,6 +155,19 @@
             background: linear-gradient(135deg, var(--hex-border-light), var(--hex-border));
             clip-path: polygon(16.67% 0%, 83.33% 0%, 100% 50%, 83.33% 100%, 16.67% 100%, 0% 50%);
             z-index: -1;
+        }
+
+        /* КОНТЕНТ ШЕСТИУГОЛЬНИКА (без clip-path, поверх фона) */
+        .hex-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
         }
 
         .hexagon.large {
@@ -154,7 +180,7 @@
             height: 46px;
         }
 
-        .hexagon:hover {
+        .hexagon:hover .hex-bg {
             filter: brightness(1.4);
             box-shadow: 0 0 40px rgba(201, 169, 97, 0.5);
         }
@@ -171,16 +197,13 @@
             0% {
                 opacity: 0;
                 transform: scale(0.1) translate(var(--start-x), var(--start-y));
-                filter: blur(10px);
             }
             50% {
                 opacity: 1;
-                filter: blur(2px);
             }
             100% {
                 opacity: 1;
                 transform: scale(1) translate(0, 0);
-                filter: blur(0);
             }
         }
 
@@ -188,39 +211,31 @@
             0% {
                 opacity: 0;
                 transform: scale(0.1) translate(var(--start-x), var(--start-y));
-                filter: blur(10px);
             }
             40% {
                 opacity: 1;
                 transform: scale(3) translate(0, 0);
-                filter: blur(0);
             }
             60% {
                 transform: scale(3) translate(0, 0);
-                filter: blur(0);
             }
             80% {
                 transform: scale(1.5) translate(0, 0);
-                filter: blur(0);
             }
             100% {
                 opacity: 1;
                 transform: scale(1) translate(0, 0);
-                filter: blur(0);
             }
         }
 
-        /* ИСПРАВЛЕНИЕ: увеличен z-index для фото и текста */
         .hex-image {
-            position: absolute;
             width: 55%;
             height: 60%;
             object-fit: contain;
             opacity: 0;
             transform: scale(0.5);
             transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            z-index: 20; /* БЫЛО 10, СТАЛО 20 */
-            pointer-events: none;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
         }
 
         .hexagon.show-image .hex-image {
@@ -239,11 +254,9 @@
             opacity: 0;
             transform: translateY(10px);
             transition: all 0.6s 0.3s;
-            z-index: 20; /* БЫЛО 10, СТАЛО 20 */
             text-shadow: 0 2px 10px rgba(0,0,0,0.9);
             letter-spacing: 0.5px;
             width: 85%;
-            pointer-events: none;
         }
 
         .hexagon.show-image .hex-title {
@@ -286,11 +299,13 @@
             .logo-itk { font-size: 1.4rem; }
             .logo-full { font-size: 0.65rem; }
             .hex-title { font-size: 0.6rem; }
+            .hexagon.large { width: 170px; height: 98px; }
+            .hexagon.small { width: 68px; height: 39px; }
         }
     </style>
 </head>
 <body>
-    <!-- Видео фон галактики — ЗАТЕМНЁННЫЙ -->
+    <!-- Видео фон галактики -->
     <div class="video-background">
         <video 
             id="galaxyVideo"
@@ -314,22 +329,59 @@
     <!-- Main Container -->
     <div class="main-container">
         <div class="hex-grid" id="hexGrid">
-            <div class="hexagon large" data-index="0" data-category="implants"></div>
-            <div class="hexagon large" data-index="1"></div>
-            <div class="hexagon large" data-index="2" data-category="cardio"></div>
-            <div class="hexagon large" data-index="3"></div>
+            <!-- Структура изменена: добавлен .hex-bg и .hex-content -->
+            <div class="hexagon large" data-index="0" data-category="implants">
+                <div class="hex-bg"></div>
+                <div class="hex-content"></div>
+            </div>
+            <div class="hexagon large" data-index="1">
+                <div class="hex-bg"></div>
+                <div class="hex-content"></div>
+            </div>
+            <div class="hexagon large" data-index="2" data-category="cardio">
+                <div class="hex-bg"></div>
+                <div class="hex-content"></div>
+            </div>
+            <div class="hexagon large" data-index="3">
+                <div class="hex-bg"></div>
+                <div class="hex-content"></div>
+            </div>
             
-            <div class="hexagon small" data-index="4"></div>
+            <div class="hexagon small" data-index="4">
+                <div class="hex-bg"></div>
+                <div class="hex-content"></div>
+            </div>
             
-            <div class="hexagon large" data-index="5" data-category="tomography"></div>
-            <div class="hexagon large" data-index="6"></div>
+            <div class="hexagon large" data-index="5" data-category="tomography">
+                <div class="hex-bg"></div>
+                <div class="hex-content"></div>
+            </div>
+            <div class="hexagon large" data-index="6">
+                <div class="hex-bg"></div>
+                <div class="hex-content"></div>
+            </div>
             
-            <div class="hexagon small" data-index="7"></div>
+            <div class="hexagon small" data-index="7">
+                <div class="hex-bg"></div>
+                <div class="hex-content"></div>
+            </div>
             
-            <div class="hexagon large" data-index="8" data-category="diagnostics"></div>
-            <div class="hexagon large" data-index="9"></div>
-            <div class="hexagon large" data-index="10" data-category="rehabilitation"></div>
-            <div class="hexagon large" data-index="11" data-category="preparations"></div>
+            <div class="hexagon large" data-index="8" data-category="diagnostics">
+                <div class="hex-bg"></div>
+                <div class="hex-content"></div>
+            </div>
+            <div class="hexagon large" data-index="9">
+                <div class="hex-bg"></div>
+                <div class="hex-content"></div>
+            </div>
+            <div class="hexagon large" data-index="10" data-category="rehabilitation">
+                <div class="hex-bg"></div>
+                <div class="hex-content"></div>
+            </div>
+            <div class="hexagon large" data-index="11" data-category="preparations">
+                <div class="hex-bg"></div>
+                <div class="hex-content"></div>
+            </div>
         </div>
     </div>
 
@@ -426,30 +478,23 @@
                 if (isCategory) {
                     const category = categories[hexagon.getAttribute('data-category')];
                     
-                    // ОТЛАДКА: проверяем загрузку изображения
-                    const img = new Image();
-                    img.onload = function() {
-                        console.log('✅ Загружено:', category.image);
-                    };
-                    img.onerror = function() {
-                        console.error('❌ НЕ загружено:', category.image);
-                    };
-                    img.src = category.image;
+                    // Ищем контейнер контента внутри шестиугольника
+                    const contentContainer = hexagon.querySelector('.hex-content');
                     
-                    const imgElement = document.createElement('img');
-                    imgElement.src = category.image;
-                    imgElement.alt = category.title;
-                    imgElement.className = 'hex-image';
-                    imgElement.onerror = function() {
-                        console.error('❌ Ошибка загрузки:', category.image);
+                    const img = document.createElement('img');
+                    img.src = category.image;
+                    img.alt = category.title;
+                    img.className = 'hex-image';
+                    img.onerror = function() {
+                        console.error('Ошибка загрузки изображения:', category.image);
                         this.style.display = 'none';
                     };
-                    hexagon.appendChild(imgElement);
+                    contentContainer.appendChild(img);
 
                     const title = document.createElement('div');
                     title.className = 'hex-title';
                     title.textContent = category.title;
-                    hexagon.appendChild(title);
+                    contentContainer.appendChild(title);
 
                     setTimeout(() => {
                         hexagon.classList.add('show-image');
@@ -497,10 +542,10 @@
         setTimeout(() => {
             hexagons.forEach(hex => {
                 hex.addEventListener('mouseenter', () => {
-                    hex.style.filter = 'brightness(1.4)';
+                    hex.querySelector('.hex-bg').style.filter = 'brightness(1.4)';
                 });
                 hex.addEventListener('mouseleave', () => {
-                    hex.style.filter = 'brightness(1)';
+                    hex.querySelector('.hex-bg').style.filter = 'brightness(1)';
                 });
             });
         }, 25000);
