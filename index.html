@@ -327,63 +327,32 @@
     </header>
 
     <!-- Main Container -->
-    <div class="main-container">
-        <div class="hex-grid" id="hexGrid">
-            <!-- Структура изменена: добавлен .hex-bg и .hex-content -->
-            <div class="hexagon large" data-index="0" data-category="implants">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="1">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="2" data-category="cardio">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="3">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            
-            <div class="hexagon small" data-index="4">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            
-            <div class="hexagon large" data-index="5" data-category="tomography">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="6">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            
-            <div class="hexagon small" data-index="7">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            
-            <div class="hexagon large" data-index="8" data-category="diagnostics">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="9">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="10" data-category="rehabilitation">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="11" data-category="preparations">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-        </div>
-    </div>
+    const categories = {
+    implants: { 
+        title: 'Костные импланты', 
+        image: '/itk-website/images/Skelet.png'  // Замените itk-website на имя вашего репозитория
+    },
+    cardio: { 
+        title: 'Сердечно-сосудистая система', 
+        image: '/itk-website/images/Head1.jpg'
+    },
+    tomography: { 
+        title: 'Томографы и рентгены', 
+        image: '/itk-website/images/tomography.jpg'
+    },
+    diagnostics: { 
+        title: 'Диагностическое оборудование', 
+        image: '/itk-website/images/diagnostics.jpg'
+    },
+    rehabilitation: { 
+        title: 'Оборудование для реабилитации', 
+        image: '/itk-website/images/rehabilitation.jpg'
+    },
+    preparations: { 
+        title: 'Высококачественные препараты', 
+        image: '/itk-website/images/preparations.jpg'
+    }
+};
 
     <!-- Bottom Bar -->
     <div class="bottom-bar">
