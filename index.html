@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITK - International Technology Key</title>
-    <style>
+<a class="logo-container" href="/">
+    <img alt="ITK Logo" class="logo-image" src="logo.svg" style="height: 40px; width: auto;">
+</a>
+        <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Sans+Pro:wght@300;400;600&display=swap');
         
         * {
@@ -26,209 +26,8 @@
             font-family: 'Source Sans Pro', sans-serif;
             background: #000;
             min-height: 100vh;
-            overflow-x: hidden; /* Изменено с hidden, чтобы скролл работал при открытом меню */
+            overflow: hidden;
             position: relative;
-        }
-
-        /* ===== АДАПТИРОВАННАЯ ШАПКА ===== */
-        .head {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 40px;
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(201, 169, 97, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        /* Гамбургер меню */
-        .Humb_container {
-            display: none; /* Скрыт на десктопе */
-            width: 30px;
-            height: 20px;
-            flex-direction: column;
-            justify-content: space-between;
-            cursor: pointer;
-            z-index: 1002;
-        }
-
-        .Humb_bar {
-            width: 100%;
-            height: 2px;
-            background-color: var(--itk-gold);
-            transition: all 0.3s ease;
-            transform-origin: center;
-        }
-
-        /* Анимация гамбургера в крестик */
-        .Humb_container.active .Humb_bar1 {
-            transform: translateY(9px) rotate(45deg);
-        }
-        .Humb_container.active .Humb_bar2 {
-            opacity: 0;
-        }
-        .Humb_container.active .Humb_bar3 {
-            transform: translateY(-9px) rotate(-45deg);
-        }
-
-        /* Логотип */
-        .logo-container {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .logo-image {
-            height: 40px;
-            width: auto;
-            /* Если нет SVG, можно использовать текстовый логотип как fallback */
-            display: none; 
-        }
-
-        /* Текстовый логотип (если картинка не загрузится) */
-        .logo-text-fallback {
-            display: flex;
-            align-items: baseline;
-            gap: 10px;
-        }
-
-        .logo-itk-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: var(--itk-green);
-            letter-spacing: 2px;
-        }
-
-        .logo-full-text {
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.7);
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* Навигация */
-        .TopMenu_container {
-            display: flex;
-        }
-
-        .TopMenu_container ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-
-        .TopMenu_container a {
-            text-decoration: none;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: color 0.3s;
-            position: relative;
-        }
-
-        .TopMenu_container a:hover {
-            color: var(--itk-gold);
-        }
-
-        .TopMenu_container a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background-color: var(--itk-gold);
-            transition: width 0.3s;
-        }
-
-        .TopMenu_container a:hover::after {
-            width: 100%;
-        }
-
-        /* Правая часть (языки) */
-        .header-right {
-            display: flex;
-            align-items: center;
-        }
-
-        .TextLang_container ul {
-            display: flex;
-            list-style: none;
-            gap: 15px;
-        }
-
-        .lang-link img {
-            width: 24px;
-            height: auto;
-            opacity: 0.6;
-            transition: opacity 0.3s;
-            filter: grayscale(100%);
-        }
-
-        .lang-link:hover img, .lang-link.active img {
-            opacity: 1;
-            filter: grayscale(0%);
-        }
-
-        /* Мобильное меню (Overlay) */
-        .mobile-menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1001;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .mobile-menu-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .mobile-menu-overlay ul {
-            list-style: none;
-            text-align: center;
-        }
-
-        .mobile-menu-overlay li {
-            margin: 20px 0;
-        }
-
-        .mobile-menu-overlay a {
-            text-decoration: none;
-            color: #fff;
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            transition: color 0.3s;
-        }
-
-        .mobile-menu-overlay a:hover {
-            color: var(--itk-gold);
         }
 
         /* ===== ВИДЕО ФОН ===== */
@@ -251,10 +50,58 @@
             height: auto;
             transform: translate(-50%, -50%);
             object-fit: cover;
-            filter: brightness(0.5) contrast(1.1);
+            filter: brightness(0.6) contrast(1.1);
         }
 
-        /* ===== MAIN CONTAINER & HEXAGONS (Оставил основные стили) ===== */
+        /* ===== HEADER ===== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 25px 60px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.6);
+            border-bottom: 1px solid rgba(201, 169, 97, 0.15);
+        }
+
+        .gold-square {
+            width: 55px;
+            height: 55px;
+            background: var(--itk-gold);
+            box-shadow: 0 2px 15px rgba(201, 169, 97, 0.4);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+.logo-image {
+    height: 40px; /* Можете поменять размер здесь */
+    width: auto;
+    object-fit: contain;
+}
+        .logo-itk {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--itk-green);
+            letter-spacing: 2px;
+        }
+
+        .logo-full {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 1.5px;
+            margin-top: 2px;
+            font-weight: 300;
+            text-transform: uppercase;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
         .main-container {
             position: relative;
             width: 100vw;
@@ -263,7 +110,6 @@
             justify-content: center;
             align-items: center;
             z-index: 10;
-            padding-top: 80px; /* Отступ под шапку */
         }
 
         .hex-grid {
@@ -275,8 +121,10 @@
 
         .hexagon {
             position: absolute;
-            width: 200px;
-            height: 115px;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            clip-path: polygon(16.67% 0%, 83.33% 0%, 100% 50%, 83.33% 100%, 16.67% 100%, 0% 50%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -286,70 +134,99 @@
             transition: filter 0.4s, box-shadow 0.4s;
         }
 
-        .hex-bg {
+        .hexagon::before {
+            content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(135deg, var(--hex-border-light), var(--hex-border));
             clip-path: polygon(16.67% 0%, 83.33% 0%, 100% 50%, 83.33% 100%, 16.67% 100%, 0% 50%);
-            z-index: 1;
-            transition: all 0.4s;
-            border: 1px solid rgba(255,255,255,0.1);
+            z-index: -1;
         }
 
-        .hex-content {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
+        .hexagon.large {
+            width: 200px;
+            height: 115px;
         }
 
-        .hexagon.large { width: 200px; height: 115px; }
-        .hexagon.small { width: 80px; height: 46px; }
+        .hexagon.small {
+            width: 80px;
+            height: 46px;
+        }
 
-        .hexagon:hover .hex-bg {
+        .hexagon:hover {
             filter: brightness(1.4);
-            box-shadow: 0 0 40px rgba(201, 169, 97, 0.3);
-            border-color: var(--itk-gold);
+            box-shadow: 0 0 40px rgba(201, 169, 97, 0.5);
         }
 
-        .hexagon.flying { animation: flyIn 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
-        .hexagon.flying-category { animation: flyInCategory 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; }
+        .hexagon.flying {
+            animation: flyIn 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        .hexagon.flying-category {
+            animation: flyInCategory 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
 
         @keyframes flyIn {
-            0% { opacity: 0; transform: scale(0.1) translate(var(--start-x), var(--start-y)); }
-            50% { opacity: 1; }
-            100% { opacity: 1; transform: scale(1) translate(0, 0); }
+            0% {
+                opacity: 0;
+                transform: scale(0.1) translate(var(--start-x), var(--start-y));
+                filter: blur(10px);
+            }
+            50% {
+                opacity: 1;
+                filter: blur(2px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translate(0, 0);
+                filter: blur(0);
+            }
         }
 
         @keyframes flyInCategory {
-            0% { opacity: 0; transform: scale(0.1) translate(var(--start-x), var(--start-y)); }
-            40% { opacity: 1; transform: scale(3) translate(0, 0); }
-            60% { transform: scale(3) translate(0, 0); }
-            80% { transform: scale(1.5) translate(0, 0); }
-            100% { opacity: 1; transform: scale(1) translate(0, 0); }
+            0% {
+                opacity: 0;
+                transform: scale(0.1) translate(var(--start-x), var(--start-y));
+                filter: blur(10px);
+            }
+            40% {
+                opacity: 1;
+                transform: scale(3) translate(0, 0);
+                filter: blur(0);
+            }
+            60% {
+                transform: scale(3) translate(0, 0);
+                filter: blur(0);
+            }
+            80% {
+                transform: scale(1.5) translate(0, 0);
+                filter: blur(0);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translate(0, 0);
+                filter: blur(0);
+            }
         }
 
         .hex-image {
+            position: absolute;
             width: 55%;
             height: 60%;
             object-fit: contain;
             opacity: 0;
             transform: scale(0.5);
             transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+            z-index: 20;
         }
 
-        .hexagon.show-image .hex-image { opacity: 1; transform: scale(1); }
+        .hexagon.show-image .hex-image {
+            opacity: 1;
+            transform: scale(1);
+        }
 
         .hex-title {
             position: absolute;
@@ -362,13 +239,18 @@
             opacity: 0;
             transform: translateY(10px);
             transition: all 0.6s 0.3s;
+            z-index: 20;
             text-shadow: 0 2px 10px rgba(0,0,0,0.9);
             letter-spacing: 0.5px;
             width: 85%;
         }
 
-        .hexagon.show-image .hex-title { opacity: 1; transform: translateY(0); }
+        .hexagon.show-image .hex-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
+        /* ===== BOTTOM BAR ===== */
         .bottom-bar {
             position: fixed;
             bottom: 0;
@@ -380,7 +262,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            padding: 0 40px;
+            padding: 0 60px;
             z-index: 100;
             border-top: 1px solid rgba(201, 169, 97, 0.3);
         }
@@ -392,149 +274,61 @@
             font-weight: 300;
         }
 
-        .bottom-text span { color: var(--itk-gold); font-weight: 600; }
-
-        /* Адаптивность */
-        @media (max-width: 1024px) {
-            .TopMenu_container { display: none; } /* Скрываем меню на планшетах/мобильных */
-            .Humb_container { display: flex; } /* Показываем гамбургер */
-            .head { padding: 0 20px; }
-            .hex-grid { transform: scale(0.8); }
+        .bottom-text span {
+            color: var(--itk-gold);
+            font-weight: 600;
         }
 
         @media (max-width: 768px) {
-            .logo-full-text { display: none; }
-            .hex-grid { transform: scale(0.6); }
+            .header { padding: 15px 25px; }
+            .gold-square { width: 40px; height: 40px; }
+            .logo-itk { font-size: 1.4rem; }
+            .logo-full { font-size: 0.65rem; }
+            .hex-title { font-size: 0.6rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Видео фон -->
+    <!-- Видео фон галактики -->
     <div class="video-background">
-        <video id="galaxyVideo" autoplay muted loop playsinline>
+        <video 
+            id="galaxyVideo"
+            autoplay 
+            muted 
+            loop 
+            playsinline>
             <source src="videos/Gala7.mp4" type="video/mp4">
         </video>
     </div>
 
-    <!-- АДАПТИРОВАННАЯ ШАПКА -->
-    <header class="head">
-        <div class="header-left">
-            <!-- Гамбургер меню -->
-            <div id="humb" class="Humb_container">
-                <div class="Humb_bar Humb_bar1"></div>
-                <div class="Humb_bar Humb_bar2"></div>
-                <div class="Humb_bar Humb_bar3"></div>
-            </div>
-            
-            <!-- Логотип -->
-            <a class="logo-container" href="/">
-                <!-- Если есть SVG логотип, раскомментируйте строку ниже и укажите путь -->
-                <!-- <img alt="ITK Logo" class="logo-image" src="/logo.svg" style="color: transparent;"> -->
-                
-                <!-- Текстовый фолбэк логотип -->
-                <div class="logo-text-fallback">
-                    <span class="logo-itk-text">ITK</span>
-                    <span class="logo-full-text">International Technology Key</span>
-                </div>
-            </a>
-        </div>
-
-        <!-- Основное меню -->
-        <nav class="TopMenu_container">
-            <ul>
-                <li><a href="#portfolio">Product Portfolio</a></li>
-                <li><a href="#life">Life with Implant</a></li>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#contacts">Contact Us</a></li>
-            </ul>
-        </nav>
-
-        <!-- Переключатель языков -->
-        <div class="header-right">
-            <nav class="TextLang_container">
-                <ul>
-                    <li>
-                        <a class="lang-link active" href="/en">
-                            <!-- Замените на свои иконки флагов или используйте текст EN/RU -->
-                            <span style="color:var(--itk-gold); font-weight:bold; font-size:0.9rem;">EN</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="lang-link" href="/ru">
-                            <span style="color:#fff; font-weight:bold; font-size:0.9rem;">RU</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+    <!-- Header -->
+    <header class="header">
+        <div class="gold-square"></div>
+        <div class="logo-text">
+            <div class="logo-itk">ITK</div>
+            <div class="logo-full">International Technology Key</div>
         </div>
     </header>
-
-    <!-- Мобильное меню (Overlay) -->
-    <div class="mobile-menu-overlay" id="mobileMenu">
-        <ul>
-            <li><a href="#portfolio" onclick="toggleMenu()">Product Portfolio</a></li>
-            <li><a href="#life" onclick="toggleMenu()">Life with Implant</a></li>
-            <li><a href="#about" onclick="toggleMenu()">About Us</a></li>
-            <li><a href="#contacts" onclick="toggleMenu()">Contact Us</a></li>
-        </ul>
-    </div>
 
     <!-- Main Container -->
     <div class="main-container">
         <div class="hex-grid" id="hexGrid">
-            <!-- Структура шестиугольников с разделением фона и контента -->
-            <div class="hexagon large" data-index="0" data-category="implants">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="1">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="2" data-category="cardio">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="3">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
+            <div class="hexagon large" data-index="0" data-category="implants"></div>
+            <div class="hexagon large" data-index="1"></div>
+            <div class="hexagon large" data-index="2" data-category="cardio"></div>
+            <div class="hexagon large" data-index="3"></div>
             
-            <div class="hexagon small" data-index="4">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
+            <div class="hexagon small" data-index="4"></div>
             
-            <div class="hexagon large" data-index="5" data-category="tomography">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="6">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
+            <div class="hexagon large" data-index="5" data-category="tomography"></div>
+            <div class="hexagon large" data-index="6"></div>
             
-            <div class="hexagon small" data-index="7">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
+            <div class="hexagon small" data-index="7"></div>
             
-            <div class="hexagon large" data-index="8" data-category="diagnostics">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="9">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="10" data-category="rehabilitation">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
-            <div class="hexagon large" data-index="11" data-category="preparations">
-                <div class="hex-bg"></div>
-                <div class="hex-content"></div>
-            </div>
+            <div class="hexagon large" data-index="8" data-category="diagnostics"></div>
+            <div class="hexagon large" data-index="9"></div>
+            <div class="hexagon large" data-index="10" data-category="rehabilitation"></div>
+            <div class="hexagon large" data-index="11" data-category="preparations"></div>
         </div>
     </div>
 
@@ -544,39 +338,46 @@
     </div>
 
     <script>
-        // === ЛОГИКА МОБИЛЬНОГО МЕНЮ ===
-        const humb = document.getElementById('humb');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const body = document.body;
-
-        function toggleMenu() {
-            humb.classList.toggle('active');
-            mobileMenu.classList.toggle('active');
-            
-            // Блокируем скролл страницы когда меню открыто
-            if (mobileMenu.classList.contains('active')) {
-                body.style.overflow = 'hidden';
-            } else {
-                body.style.overflow = 'auto'; // Или 'hidden' если хотите всегда без скролла
-            }
-        }
-
-        humb.addEventListener('click', toggleMenu);
-
-        // === ОСНОВНАЯ ЛОГИКА САЙТА ===
         const categories = {
-            implants: { title: 'Костные импланты', image: 'images/Skelet.png' },
-            cardio: { title: 'Сердечно-сосудистая система', image: 'images/Head1.jpg' },
-            tomography: { title: 'Томографы и рентгены', image: 'images/tomography.jpg' },
-            diagnostics: { title: 'Диагностическое оборудование', image: 'images/diagnostics.jpg' },
-            rehabilitation: { title: 'Оборудование для реабилитации', image: 'images/rehabilitation.jpg' },
-            preparations: { title: 'Высококачественные препараты', image: 'images/preparations.jpg' }
+            implants: { 
+                title: 'Костные импланты', 
+                image: '/EvgeniiYuliya/Gala/blob/main/image/Head1.jpg'
+            },
+            cardio: { 
+                title: 'Сердечно-сосудистая система', 
+                image: 'images/Head1.jpg'
+            },
+            tomography: { 
+                title: 'Томографы и рентгены', 
+                image: 'images/tomography.jpg'
+            },
+            diagnostics: { 
+                title: 'Диагностическое оборудование', 
+                image: 'images/diagnostics.jpg'
+            },
+            rehabilitation: { 
+                title: 'Оборудование для реабилитации', 
+                image: 'images/rehabilitation.jpg'
+            },
+            preparations: { 
+                title: 'Высококачественные препараты', 
+                image: 'images/preparations.jpg'
+            }
         };
 
         const finalPositions = [
-            { x: 170, y: 100 }, { x: 380, y: 100 }, { x: 590, y: 100 }, { x: 800, y: 100 },
-            { x: 402, y: 228 }, { x: 380, y: 285 }, { x: 590, y: 285 }, { x: 690, y: 410 },
-            { x: 170, y: 465 }, { x: 380, y: 465 }, { x: 590, y: 465 }, { x: 800, y: 465 }
+            { x: 170, y: 100 },
+            { x: 380, y: 100 },
+            { x: 590, y: 100 },
+            { x: 800, y: 100 },
+            { x: 402, y: 228 },
+            { x: 380, y: 285 },
+            { x: 590, y: 285 },
+            { x: 690, y: 410 },
+            { x: 170, y: 465 },
+            { x: 380, y: 465 },
+            { x: 590, y: 465 },
+            { x: 800, y: 465 }
         ];
 
         const hexagons = document.querySelectorAll('.hexagon');
@@ -595,11 +396,15 @@
             const gridWidth = 1100;
             const gridHeight = 650;
             const padding = 100;
+            
             const availableWidth = window.innerWidth - padding;
             const availableHeight = window.innerHeight - padding - 100;
+            
             const scaleX = availableWidth / gridWidth;
             const scaleY = availableHeight / gridHeight;
+            
             const scale = Math.min(scaleX, scaleY, 1);
+            
             hexGrid.style.transform = `scale(${scale})`;
         }
 
@@ -611,26 +416,32 @@
                 hexagon.style.setProperty('--start-x', '-1000px');
                 hexagon.style.setProperty('--start-y', '-1000px');
                 
-                if (isCategory) hexagon.classList.add('flying-category');
-                else hexagon.classList.add('flying');
+                if (isCategory) {
+                    hexagon.classList.add('flying-category');
+                } else {
+                    hexagon.classList.add('flying');
+                }
 
                 if (isCategory) {
                     const category = categories[hexagon.getAttribute('data-category')];
-                    const contentContainer = hexagon.querySelector('.hex-content');
                     
                     const img = document.createElement('img');
                     img.src = category.image;
                     img.alt = category.title;
                     img.className = 'hex-image';
-                    img.onerror = function() { console.error('Ошибка загрузки:', category.image); };
-                    contentContainer.appendChild(img);
+                    img.onerror = function() {
+                        this.style.display = 'none';
+                    };
+                    hexagon.appendChild(img);
 
                     const title = document.createElement('div');
                     title.className = 'hex-title';
                     title.textContent = category.title;
-                    contentContainer.appendChild(title);
+                    hexagon.appendChild(title);
 
-                    setTimeout(() => hexagon.classList.add('show-image'), 1200);
+                    setTimeout(() => {
+                        hexagon.classList.add('show-image');
+                    }, 1200);
                 }
 
                 setTimeout(() => {
@@ -642,30 +453,42 @@
             }, delay);
         }
 
-        // Инициализация
+        // Запуск видео
         const video = document.getElementById('galaxyVideo');
-        video.play().catch(e => console.log(e));
+        video.play().catch(error => {
+            console.log('Автовоспроизведение:', error);
+        });
 
         setPositions();
         scaleGrid();
         window.addEventListener('resize', scaleGrid);
 
         const animationSequence = [
-            { index: 0, delay: 500 }, { index: 1, delay: 2500 }, { index: 2, delay: 3500 },
-            { index: 3, delay: 6500 }, { index: 4, delay: 8500 }, { index: 5, delay: 9500 },
-            { index: 6, delay: 12500 }, { index: 7, delay: 14500 }, { index: 8, delay: 16500 },
-            { index: 9, delay: 19500 }, { index: 10, delay: 20500 }, { index: 11, delay: 22500 }
+            { index: 0, delay: 500 },
+            { index: 1, delay: 2500 },
+            { index: 2, delay: 3500 },
+            { index: 3, delay: 6500 },
+            { index: 4, delay: 8500 },
+            { index: 5, delay: 9500 },
+            { index: 6, delay: 12500 },
+            { index: 7, delay: 14500 },
+            { index: 8, delay: 16500 },
+            { index: 9, delay: 19500 },
+            { index: 10, delay: 20500 },
+            { index: 11, delay: 22500 }
         ];
 
-        animationSequence.forEach(seq => animateHexagon(seq.index, seq.delay));
+        animationSequence.forEach(seq => {
+            animateHexagon(seq.index, seq.delay);
+        });
 
         setTimeout(() => {
             hexagons.forEach(hex => {
                 hex.addEventListener('mouseenter', () => {
-                    hex.querySelector('.hex-bg').style.filter = 'brightness(1.4)';
+                    hex.style.filter = 'brightness(1.4)';
                 });
                 hex.addEventListener('mouseleave', () => {
-                    hex.querySelector('.hex-bg').style.filter = 'brightness(1)';
+                    hex.style.filter = 'brightness(1)';
                 });
             });
         }, 25000);
