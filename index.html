@@ -30,7 +30,7 @@
             position: relative;
         }
 
-        /* ===== ВИДЕО ФОН ===== */
+        /* ===== ВИДЕО ФОН — ЗАТЕМНЁННЫЙ ===== */
         .video-background {
             position: fixed;
             top: 0;
@@ -50,7 +50,8 @@
             height: auto;
             transform: translate(-50%, -50%);
             object-fit: cover;
-            /* НЕТ ФИЛЬТРОВ — видео чистое */
+            /* ЗАТЕМНЕНИЕ ВИДЕО — меняйте brightness */
+            filter: brightness(0.6) contrast(1.1);
         }
 
         /* ===== HEADER ===== */
@@ -128,6 +129,7 @@
             opacity: 0;
             transform: scale(0);
             transition: filter 0.4s, box-shadow 0.4s;
+            overflow: visible; /* ВАЖНО: позволяет контенту выходить за clip-path */
         }
 
         .hexagon::before {
@@ -208,6 +210,7 @@
             }
         }
 
+        /* ИСПРАВЛЕНИЕ: увеличен z-index для фото и текста */
         .hex-image {
             position: absolute;
             width: 55%;
@@ -216,7 +219,8 @@
             opacity: 0;
             transform: scale(0.5);
             transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            z-index: 10;
+            z-index: 20; /* БЫЛО 10, СТАЛО 20 */
+            pointer-events: none;
         }
 
         .hexagon.show-image .hex-image {
@@ -235,10 +239,11 @@
             opacity: 0;
             transform: translateY(10px);
             transition: all 0.6s 0.3s;
-            z-index: 10;
+            z-index: 20; /* БЫЛО 10, СТАЛО 20 */
             text-shadow: 0 2px 10px rgba(0,0,0,0.9);
             letter-spacing: 0.5px;
             width: 85%;
+            pointer-events: none;
         }
 
         .hexagon.show-image .hex-title {
@@ -285,7 +290,7 @@
     </style>
 </head>
 <body>
-    <!-- Видео фон галактики -->
+    <!-- Видео фон галактики — ЗАТЕМНЁННЫЙ -->
     <div class="video-background">
         <video 
             id="galaxyVideo"
@@ -421,14 +426,25 @@
                 if (isCategory) {
                     const category = categories[hexagon.getAttribute('data-category')];
                     
-                    const img = document.createElement('img');
-                    img.src = category.image;
-                    img.alt = category.title;
-                    img.className = 'hex-image';
+                    // ОТЛАДКА: проверяем загрузку изображения
+                    const img = new Image();
+                    img.onload = function() {
+                        console.log('✅ Загружено:', category.image);
+                    };
                     img.onerror = function() {
+                        console.error('❌ НЕ загружено:', category.image);
+                    };
+                    img.src = category.image;
+                    
+                    const imgElement = document.createElement('img');
+                    imgElement.src = category.image;
+                    imgElement.alt = category.title;
+                    imgElement.className = 'hex-image';
+                    imgElement.onerror = function() {
+                        console.error('❌ Ошибка загрузки:', category.image);
                         this.style.display = 'none';
                     };
-                    hexagon.appendChild(img);
+                    hexagon.appendChild(imgElement);
 
                     const title = document.createElement('div');
                     title.className = 'hex-title';
@@ -444,50 +460,3 @@
                     hexagon.classList.remove('flying', 'flying-category');
                     hexagon.style.opacity = '1';
                     hexagon.style.transform = 'scale(1)';
-                }, isCategory ? 3000 : 2000);
-
-            }, delay);
-        }
-
-        // Запуск видео
-        const video = document.getElementById('galaxyVideo');
-        video.play().catch(error => {
-            console.log('Автовоспроизведение:', error);
-        });
-
-        setPositions();
-        scaleGrid();
-        window.addEventListener('resize', scaleGrid);
-
-        const animationSequence = [
-            { index: 0, delay: 500 },
-            { index: 1, delay: 2500 },
-            { index: 2, delay: 3500 },
-            { index: 3, delay: 6500 },
-            { index: 4, delay: 8500 },
-            { index: 5, delay: 9500 },
-            { index: 6, delay: 12500 },
-            { index: 7, delay: 14500 },
-            { index: 8, delay: 16500 },
-            { index: 9, delay: 19500 },
-            { index: 10, delay: 20500 },
-            { index: 11, delay: 22500 }
-        ];
-
-        animationSequence.forEach(seq => {
-            animateHexagon(seq.index, seq.delay);
-        });
-
-        setTimeout(() => {
-            hexagons.forEach(hex => {
-                hex.addEventListener('mouseenter', () => {
-                    hex.style.filter = 'brightness(1.4)';
-                });
-                hex.addEventListener('mouseleave', () => {
-                    hex.style.filter = 'brightness(1)';
-                });
-            });
-        }, 25000);
-    </script>
-</body>
-</html>
